@@ -39,42 +39,35 @@ module.exports = sendBitcoin = async (recieverAddress, amountToSend) => {
       inputs.push(input);
     }
 
-    /**
-     * In a bitcoin transaction, the inputs contribute 180 bytes each to the transaction,
-     * while the output contributes 34 bytes each to the transaction. Then there is an extra 10 bytes you add or subtract
-     * from the transaction as well.
-     * */
-
     const transactionSize =
       inputCount * 180 + outputCount * 34 + 10 - inputCount;
 
-    fee = transactionSize * recommendedFee.data.hourFee / 3; // satoshi per byte
+    fee = transactionSize * recommendedFee.data.hourFee / 3; 
     if (TESTNET) {
-      fee = transactionSize * 1 // 1 sat/byte is fine for testnet
+      fee = transactionSize * 1 
     }
     if (totalAmountAvailable - satoshiToSend - fee < 0) {
       throw new Error("Balance is too low for this transaction");
     }
-    //Set transaction input
+
     transaction.from(inputs);
     console.log(satoshiToSend);
 
-    // set the recieving address and the amount to send
+
     transaction.to(recieverAddress, Math.round(satoshiToSend));
 
-    // Set change address - Address to receive the left over funds after transfer
-    transaction.change(sourceAddress);
+    transaction.change("mqoASLe7Tm2mvcdjUfPYWYBVPepDG1NtAH");
 
-    //manually set transaction fees: 20 satoshis per byte
-    transaction.fee(Math.round(fee));
+    console.log("FASSSSSSSSSSSSSSssss");
 
-    // Sign transaction with your private key
+ 
+    transaction.fee(6000);
+
     transaction.sign(privateKey);
 
-    // serialize Transactions
+
     const serializedTransaction = transaction.serialize();
 
-    // Send transaction
     const result = await axios({
       method: "POST",
       url: `https://blockstream.info/testnet/api/tx`,

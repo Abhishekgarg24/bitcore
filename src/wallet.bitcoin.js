@@ -63,8 +63,8 @@ const getWallet = (network = mainnet, privkey) => {
 
 const recoverWallet = (network = mainnet, seedphrase = 'mad foot phrase tourist animal vanish over ancient luxury obtain check abandon') => {
   let passPhrase = Mnemonic(seedphrase);
-  const derivationPath = "m/32/0/0";
-  let xpriv = passPhrase.toHDPrivateKey(passPhrase, network, derivationPath);
+  
+  let xpriv = passPhrase.toHDPrivateKey(passPhrase, network);
   return {
     xpub: xpriv.xpubkey,
     privateKey: xpriv.privateKey.toString(),
